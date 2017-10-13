@@ -22,7 +22,10 @@ handleClick(){
   let key = 'user' + usersData.length
   let newUser = {id:key,name:userName}
 
-  this.setState({usersData:[...usersData , newUser]})
+  this.setState({
+    selectedInput:'',
+    usersData:[...usersData , newUser]
+  })
 }
 handleChange(e){
   this.setState({
@@ -40,6 +43,7 @@ handleChange(e){
                  type="text"
                  className="form-control"
                  placeholder="Username"
+                 value={this.state.selectedInput}
                  onChange={this.handleChange}
                />
              <button
