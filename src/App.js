@@ -3,61 +3,62 @@ import logo from './logo.svg';
 import './App.css';
 
 
-class Timer2  extends Component {
-  constructor(props){
-    super(props)
-
-    this.state = {
-      date : new Date(),
-    }
-  }
-
-  componentDidMount(){
-    setInterval( () => {
-      this.setState({
-        date : new Date()
-      })
-    } ,1000);
-  }
-
-  render(){
-    const { showFullDate } = this.props
-    
-    if( showFullDate ){
-      return(
-
-        <h2> {this.state.date.toLocaleTimeString()}</h2>
-      )
-    }else{
-      return null;
-    }
-  }
-}
-
-
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      // date : new Date(),
+      selectedInput:'',
+      usersData:[]
     }
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  render() {
 
+handleClick(){
+  const {selectedInput , usersData } = this.state;
+
+  let userName = selectedInput;
+  let key = 'user' + usersData.length
+  let newUser = {id:key,name:userName}
+
+  this.setState({usersData:[...usersData , newUser]})
+}
+handleChange(e){
+  this.setState({
+    selectedInput:e.target.value
+  })
+}
+
+  render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Timer2 showFullDate />
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-offset-4 col-md-3'>
+               <input
+                 type="text"
+                 className="form-control"
+                 placeholder="Username"
+                 onChange={this.handleChange}
+               />
+             <button
+               className='btn btn-default btn-lg'
+               onClick={this.handleClick}
+               style={{width:'100%'}}
+               >
+               Добавить пользователя
+             </button>
+             <ul className="list-group">
+               {this.state.usersData.map((item,index) =>
+                 <li className="list-group-item" key={index}>{item.name}</li>
+               )}
+            </ul>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
-
 export default App;
