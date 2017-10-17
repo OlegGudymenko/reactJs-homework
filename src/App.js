@@ -55,7 +55,7 @@ handleChange(e){
              </button>
              <ul className="list-group">
                {this.state.usersData.map((item,index) =>
-                 <li className="list-group-item" key={index}>{item.name}</li>
+                 <li className="list-group-item" key={item.id}>{item.name}</li>
                )}
             </ul>
             </div>
