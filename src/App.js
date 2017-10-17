@@ -4,7 +4,6 @@ import './App.css';
 import TasksList from './TasksList';
 import Categories from './Categories';
 
-
 class App extends Component {
   constructor(props){
     super(props)
