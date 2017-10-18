@@ -8,16 +8,39 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-
+      categories:[
+        {
+          id:1,
+          name:'item1'
+        },
+        {
+          id:2,
+          name:'item2'
+        }
+      ],
+      tasksList:[]
     }
+    this.addCategory = this.addCategory.bind(this)
   }
 
+  addCategory(data){
+    let itemId;
+    if(!data.parentId){
+      itemId = this.state.categories.length + 1;
+      data.id = itemId ;
+    }
+    this.setState({
+      categories:[ ...this.state.categories , data]
+    })
+    console.log(data ,'data')
+  }
   render() {
     return (
       <div className="App">
         <div className='container'>
+          <div>{this.state.categories[0].name}</div>
           <div className='row'>
-            <Categories />
+            <Categories addCategory={this.addCategory}/>
             <TasksList />
           </div>
         </div>
