@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import TasksList from './TasksList';
-import Categories from './Categories';
+import TasksList from './components/TasksList';
+import Categories from './components/Categories';
 
 class App extends Component {
   constructor(props){
@@ -18,7 +18,11 @@ class App extends Component {
           name:'item2'
         }
       ],
-      tasksList:[]
+      selectedCategory:'',
+
+      tasksList:[],
+      // selectedtask
+
     }
     this.addCategory = this.addCategory.bind(this)
   }

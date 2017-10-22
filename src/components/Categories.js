@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-
+import React, { Component } from 'react'
+// import InputForm from './InputForm '
+// import BtnIcon from './BtnIcon'
 const BtnIcon = (props) => {
   let btnClass ;
   switch(props.type) {
@@ -20,8 +21,6 @@ const BtnIcon = (props) => {
     </button>
   )
 };
-
-
 
 class InputForm extends Component {
   constructor(props){
@@ -57,6 +56,7 @@ class InputForm extends Component {
          type="text"
          onChange={this.inputChange}
          className="form-control pull-left"
+         placeholder={this.props.placeholder}
          value={this.state.text}
        />
         <BtnIcon
@@ -118,7 +118,7 @@ class Categories extends Component {
       return (
         <div className='col-md-5'>
           <div className='categories-container'>
-            <InputForm action={this.addCategory} />
+            <InputForm action={this.addCategory} placeholder='Enter category title' />
             <List data={this.state}/>
           </div>
         </div>

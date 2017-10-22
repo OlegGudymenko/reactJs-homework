@@ -13,7 +13,9 @@
   padding: 20px;
   color: white;
 }
-
+.hidden{
+  display:none;
+}
 .App-title {
   font-size: 1.5em;
 }
@@ -37,6 +39,7 @@ input{
 }
 
 
+
 .categories-container .list-group-item{
   min-height: 35px;
 }
@@ -47,6 +50,12 @@ input{
 .btn-input-container input {
   width:90%;
 }
+.tasksList-container .btn-input-container input {
+  width:82%;
+}
 .btn-input-container button{
   margin-top:10px;
+}
+.task-table th ,.task-table td{
+  text-align: center;
 }
