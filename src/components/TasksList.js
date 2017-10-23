@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import TableRow from 'TableRow';
 // import BtnIcon from 'BtnIcon';
 // import InputForm from './InputForm ';
 const BtnIcon = (props) => {
@@ -12,6 +13,9 @@ const BtnIcon = (props) => {
         break;
     case 'remove':
       btnClass = 'glyphicon-remove'
+        break;
+    case 'save':
+      btnClass = 'glyphicon-ok'
         break;
     default:
   }
@@ -68,50 +72,92 @@ class InputForm extends Component {
     )
   }
 }
-const TaskTable = (props) => {
-  const updateTask = () => {
+class TableRow extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      inputValue:''
+    }
+    this.inputChange = this.inputChange.bind(this)
+    this.inputSave = this.inputSave.bind(this)
+    this.changeTaskStatus = this.changeTaskStatus.bind(this)
   }
-  const changeTask = () => {
-    props.changeTask()
+  componentWillMount(){
+    this.setState({
+      inputValue: this.props.item.taskName
+    })
   }
-  const changeTaskStatus = () => {
-    props.changeTaskStatus()
+  inputChange(e) {
+    this.setState({
+      inputValue: e.target.value
+    })
   }
+  inputSave(){
+    this.props.updateTask( this.props.item.id , this.state.inputValue )
+  }
+  changeTaskStatus(){
+    this.props.changeTask( this.props.item.id )
+  }
+  render(){
     return(
-      <table className="table table-bordered task-table">
-        <thead>
-          <tr>
-            <th>Is Done</th>
-            <th>Task Name</th>
-            <th>icon</th>
-          </tr>
-        </thead>
-        <tbody>
+      <tr className="active" key={this.props.item.id}>
+        <td>
+          <input type="checkbox"
+            checked={this.props.item.done}
+            onChange={ () => { this.props.changeTaskStatus( this.props.item.id , !this.props.item.done ) }}/>
+        </td>
+        <td>
           {
-            props.taskData.map( (item) => (
-                <tr className="active" key={item.id}>
-                  <td>
-                    <input type="checkbox"
-                      checked={item.done}
-                      onChange={changeTaskStatus}/>
-                  </td>
-                  <td>
-                    <span className=''> {item.taskName} </span>
-                    <p className='hidden'>{item.taskDesription}</p>
-                  </td>
-                  <td>
-                    <BtnIcon
-                      type='edit'
-                      className='btn-xs'
-                      action={changeTask}
-                    />
-                  </td>
-                </tr>
-            ))
+            this.props.item.edit ?
+            <input
+              type="text"
+              value={this.state.inputValue}
+              onChange={this.inputChange}
+              />
+           :
+            <div>
+              <span className=''> {this.props.item.taskName} </span>
+              <p className='hidden'> {this.props.item.taskDesription} </p>
+            </div>
           }
-        </tbody>
-      </table>
+        </td>
+        <td>
+          <BtnIcon
+            type={this.props.item.edit ? 'save' : 'edit'}
+            className='btn-xs'
+            action={this.props.item.edit ? this.inputSave
+                  : this.changeTaskStatus}/>
+        </td>
+      </tr>
     )
+  }
+}
+
+const TaskTable = (props) => {
+  return(
+    <table className="table table-bordered task-table">
+      <thead>
+        <tr>
+          <th>Is Done</th>
+          <th>Task Name</th>
+          <th>icon</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          props.taskData.map( (item) => (
+            <TableRow
+              item={item}
+              key={item.id}
+              changeTask={(id,data) => { props.changeTask(id,data) }}
+              updateTask={(id,data) => { props.updateTask(id, data) }}
+              changeTaskStatus={(id,data) => { props.changeTaskStatus(id,data) }}
+            />
+          ))
+        }
+      </tbody>
+    </table>
+  )
 }
 class TasksList extends Component {
   constructor(props){
@@ -138,24 +184,37 @@ class TasksList extends Component {
     this.addTask = this.addTask.bind(this);
     this.changeTask = this.changeTask.bind(this);
     this.updateTask = this.updateTask.bind(this);
+    this.changeTaskStatus = this.changeTaskStatus.bind(this);
   }
-  changeTask(id,status){
+  changeTask(id){
+    let list = this.state.taskList;
+    list.filter( (item) => (
+      (item.id === id) ? item.edit = !item.edit : null
+    ))
     this.setState({
-      // taskList.id
+      taskList :[...list ]
     })
   }
-  updateTask(data){
-
-  }
-  changeTaskStatus(id){
+  updateTask(id,data){
     let list = this.state.taskList;
-
-    // list.filter( (item) => (
-    //   if(item.id === id){
-    //     item.done = !item.done
-    //   }
-    // ))
-    // console.log(list)
+      list.filter( (item) => (
+        (item.id === id) ? (
+          item.edit = !item.edit,
+          item.taskName = data )
+        : null
+      ))
+      this.setState({
+        taskList :[...list ]
+      })
+  }
+  changeTaskStatus(id,status){
+    let list = this.state.taskList;
+    list.filter( (item) => (
+      (item.id === id) ? item.done = status : null
+    ))
+    this.setState({
+      taskList :[...list ]
+    })
   }
   addTask(){
 
