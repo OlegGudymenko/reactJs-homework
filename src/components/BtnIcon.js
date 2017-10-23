@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export  const BtnIcon = (props) => {
+const BtnIcon = (props) => {
   let btnClass ;
   switch(props.type) {
     case 'edit':
@@ -12,6 +12,9 @@ export  const BtnIcon = (props) => {
     case 'remove':
       btnClass = 'glyphicon-remove'
         break;
+    case 'save':
+      btnClass = 'glyphicon-ok'
+        break;
     default:
   }
   return(
@@ -21,4 +24,4 @@ export  const BtnIcon = (props) => {
   )
 };
 
-// BtnIcon ;
+export default BtnIcon;

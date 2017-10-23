@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import BtnIcon from 'BtnIcon';
+import BtnIcon from './BtnIcon';
 
-class InputForm extends Component {
+class InputBlock extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -17,12 +17,7 @@ class InputForm extends Component {
     });
   }
   addCategory () {
-    let data = {
-      id:'',
-      parentId:null,
-      name: this.state.text
-    }
-    this.props.action(data)
+    this.props.action(this.state.text)
     this.setState({
         text: ''
      });
@@ -47,4 +42,4 @@ class InputForm extends Component {
   }
 }
 
-export default InputForm
+export default InputBlock;

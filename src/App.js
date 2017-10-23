@@ -8,44 +8,64 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      categories:[
+      selectedCategory:'',
+      tasksList:[
+        {
+          id:'id1',
+          done:true,
+          taskName:'lear react',
+          taskDesription:'some text',
+          edit:false,
+          category:'react'
+        },
+        {
+          id:'id2',
+          done:false,
+          taskName:'lear redux',
+          taskDesription:'some text 2',
+          edit:false,
+          category:'react'
+        }
+      ],
+      categoriesList:[
         {
           id:1,
-          name:'item1'
+          name:'react',
+          parent:null
         },
         {
           id:2,
-          name:'item2'
+          name:'redux',
+          parent:null
         }
-      ],
-      selectedCategory:'',
-
-      tasksList:[],
-      // selectedtask
-
+      ]
     }
     this.addCategory = this.addCategory.bind(this)
   }
-
   addCategory(data){
-    let itemId;
-    if(!data.parentId){
-      itemId = this.state.categories.length + 1;
-      data.id = itemId ;
+    let itemId = this.state.categoriesList.length;
+    let newCategory = {
+      id:itemId+1,
+      name:data,
+      parent:null
     }
     this.setState({
-      categories:[ ...this.state.categories , data]
+      categoriesList:[ ...this.state.categoriesList , newCategory]
     })
-    console.log(data ,'data')
+    console.log(this.state,'app state')
   }
+
+
   render() {
     return (
       <div className="App">
         <div className='container'>
-          <div>{this.state.categories[0].name}</div>
           <div className='row'>
-            <Categories addCategory={this.addCategory}/>
-            <TasksList />
+            <Categories
+              addCategory={this.addCategory}
+              data={this.state.categoriesList}
+            />
+            <TasksList data={this.state.tasksList}/>
           </div>
         </div>
       </div>
