@@ -1,27 +1,41 @@
 import React, { Component } from 'react'
 import InputBlock from './InputBlock';
 import BtnIcon from './BtnIcon';
-import List from './List';
+import ListItem from './ListItem';
 
-class Categories extends Component {
-  constructor(props){
-    super(props)
-    this.state = {}
-    this.addCategory = this.addCategory.bind(this)
-  }
-  addCategory(data){
-    this.props.addCategory(data)
-  }
-
-  render() {
-      return (
-        <div className='col-md-5'>
-          <div className='categories-container'>
-            <InputBlock action={this.addCategory} placeholder='Enter category title' />
-          <List data={this.props.data}/>
-          </div>
+const Categories = (props) => {
+  const {
+    data,
+    editCategory,
+    addSubCategory,
+    removeCategory,
+    addCategory,
+    saveChanges
+    } = props
+    return (
+      <div className='col-md-5'>
+        <div className='categories-container'>
+          <InputBlock
+            action={(data) => { addCategory(data) }}
+            placeholder='Enter category title' />
+            <ul className="list-group">
+              {data.map( (item) => {
+                return(
+                  <ListItem
+                    key={item.id}
+                    id={item.id}
+                    edit={item.edit}
+                    name={item.name}
+                    saveChanges={(id,data) => saveChanges(item.id,data)}
+                    editCategory={(id) => editCategory(id)}
+                    addSubCategory={(id) => addSubCategory(id)}
+                    removeCategory={(id) => removeCategory( id)}
+                  />
+                )
+              })}
+            </ul>
         </div>
-      );
-    }
+      </div>
+    );
   }
 export default Categories;

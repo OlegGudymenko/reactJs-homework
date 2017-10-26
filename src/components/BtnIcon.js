@@ -18,7 +18,10 @@ const BtnIcon = (props) => {
     default:
   }
   return(
-    <button type="button" className={`btn btn-default ${props.className}`} onClick={props.action}>
+    <button
+        type="button"
+        className={`btn btn-default ${props.className}`}
+        onClick={props.action}>
       <span className={ `glyphicon ${btnClass}` }></span>
     </button>
   )
