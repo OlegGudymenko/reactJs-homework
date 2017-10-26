@@ -12,7 +12,7 @@ class ListItem extends Component {
   }
   componentWillMount(){
     this.setState({
-      inputValue:this.props.name
+      inputValue:this.props.data.name
     })
   }
   saveChanges(id){
@@ -25,41 +25,45 @@ class ListItem extends Component {
   }
   render(){
     const {
-      id,
-      edit,
-      name,
+      data,
+      selectCategory,
       editCategory,
       addSubCategory,
-      removeCategory
+      removeCategory,
+      selected
     } = this.props
     return(
-      <li className="list-group-item clearfix" >
-        {edit ?
+      <li
+        className={`list-group-item clearfix ${selected == data.id ? `selected` : `` }`}>
+        {data.edit ?
           <input
             type="text"
             value={this.state.inputValue}
             onChange={this.inputChange}
           />
         :
-          <span className='task-name pull-left'>{name}</span> }
+        <span
+          className='task-name pull-left'
+          onClick={ () => selectCategory(data.id)}
+          >{data.name}</span> }
         <div className="btn-group pull-right">
-          {edit ?
+          {data.edit ?
             <BtnIcon
               action={this.saveChanges}
               type='save'
             />
           :
             <BtnIcon
-              action={() => { editCategory(id) }}
+              action={() => { editCategory(data.id) }}
               type='edit'
             />
           }
           <BtnIcon
-            action={() => { addSubCategory(id) }}
+            action={() => { addSubCategory(data.id) }}
             type='add'
           />
           <BtnIcon
-            action={() => { removeCategory(id) }}
+            action={() => { removeCategory(data.id) }}
             type='remove'
           />
         </div>

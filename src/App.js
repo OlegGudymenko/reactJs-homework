@@ -13,18 +13,18 @@ class App extends Component {
         {
           id:'id1',
           done:true,
-          taskName:'lear react',
+          taskName:'learn react',
           taskDesription:'some text',
           edit:false,
-          category:'react'
+          categoryId:'1'
         },
         {
           id:'id2',
           done:false,
-          taskName:'lear redux',
+          taskName:'learn redux',
           taskDesription:'some text 2',
           edit:false,
-          category:'react'
+          categoryId:'2'
         }
       ],
       categoriesList:[
@@ -47,6 +47,12 @@ class App extends Component {
     this.addSubCategory = this.addSubCategory.bind(this)
     this.removeCategory = this.removeCategory.bind(this)
     this.saveChanges = this.saveChanges.bind(this)
+    this.selectCategory = this.selectCategory.bind(this)
+    this.addTask = this.addTask.bind(this);
+    this.changeTask = this.changeTask.bind(this);
+    this.updateTask = this.updateTask.bind(this);
+    this.changeTaskStatus = this.changeTaskStatus.bind(this);
+    this.filterTask = this.filterTask.bind(this);
   }
   addCategory(data){
     let itemId = this.state.categoriesList.length;
@@ -70,7 +76,7 @@ class App extends Component {
         return item
       })
     this.setState({
-      categoriesList:newList
+      categoriesList:[...newList]
     })
   }
   addSubCategory(id){
@@ -83,7 +89,7 @@ class App extends Component {
         }
       })
       this.setState({
-        categoriesList:newList
+        categoriesList:[...newList]
       })
   }
 
@@ -99,7 +105,42 @@ class App extends Component {
       categoriesList:newList
     })
   }
+  selectCategory(id){
+    this.setState({
+      selectedCategory:id
+    })
+  }
+addTask(data){
+  this.setState({
+    tasksList :[ ...this.state.tasksList, data]
+  })
+}
+changeTask(data){
+  this.setState({
+    taskList :[ ...this.state.tasksList, data]
+  })
+}
+updateTask(data){
+  this.setState({
+    tasksList :[ ...this.state.tasksList, data]
+  })
+}
+changeTaskStatus(data){
+  this.setState({
+    taskList :[ ...this.state.tasksList, data]
+  })
+}
 
+filterTask(){
+  let selectedTask = this.state.tasksList.filter( (item) => {
+    if( item.categoryId == this.state.selectedCategory ){
+      return item
+    }
+  })
+  console.log(selectedTask , 'selectedTask')
+  console.log(this.state)
+  return selectedTask
+}
   render() {
     return (
       <div className="App">
@@ -111,9 +152,22 @@ class App extends Component {
               addSubCategory={this.addSubCategory}
               removeCategory={this.removeCategory}
               saveChanges={this.saveChanges}
+              selectCategory={this.selectCategory}
               data={this.state.categoriesList}
+              selected={this.state.selectedCategory}
             />
-            <TasksList data={this.state.tasksList}/>
+          {this.state.selectedCategory
+            ? <TasksList
+                data={this.filterTask()}
+                selected={this.state.selectedCategory}
+                changeTask={this.changeTask}
+                updateTask={this.updateTask}
+                changeTaskStatus={this.changeTaskStatus}
+                addTask={this.addTask}
+            />
+            : null
+          }
+
           </div>
         </div>
       </div>

@@ -6,11 +6,13 @@ import ListItem from './ListItem';
 const Categories = (props) => {
   const {
     data,
+    selectCategory,
     editCategory,
     addSubCategory,
     removeCategory,
     addCategory,
-    saveChanges
+    saveChanges,
+    selected,
     } = props
     return (
       <div className='col-md-5'>
@@ -23,9 +25,9 @@ const Categories = (props) => {
                 return(
                   <ListItem
                     key={item.id}
-                    id={item.id}
-                    edit={item.edit}
-                    name={item.name}
+                    data={item}
+                    selected={selected}
+                    selectCategory={(id) => selectCategory(id)}
                     saveChanges={(id,data) => saveChanges(item.id,data)}
                     editCategory={(id) => editCategory(id)}
                     addSubCategory={(id) => addSubCategory(id)}

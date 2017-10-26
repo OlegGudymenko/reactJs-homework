@@ -3,72 +3,35 @@ import TableRow from './TableRow';
 import TaskTable from './TaskTable';
 import InputBlock from './InputBlock';
 
-class TasksList extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      categoryName:'React',
-      taskList:[
-        {
-          id:'id1',
-          done:true,
-          taskName:'lear react',
-          taskDesription:'some text',
-          edit:false
-        },
-        {
-          id:'id2',
-          done:false,
-          taskName:'lear redux',
-          taskDesription:'some text 2',
-          edit:false
-        }
-      ],
-      selectedtask:'id1'
-    }
-    this.addTask = this.addTask.bind(this);
-    this.changeTask = this.changeTask.bind(this);
-    this.updateTask = this.updateTask.bind(this);
-    this.changeTaskStatus = this.changeTaskStatus.bind(this);
-  }
-  componentWillMount(){
-    console.log(this.props)
-  }
-  // componentWillReceiveProps(nextProps){
-  //   console.log(nextProps , 'task list S')
-  // }
-  changeTask(id){
-    let list = this.state.taskList;
+const TasksList = (props) => {
+
+  const changeTask = (id) => {
+    let list = props.data;
     list.filter( (item) => (
       (item.id === id) ? item.edit = !item.edit : null
     ))
-    this.setState({
-      taskList :[...list ]
-    })
+    props.changeTask(list)
   }
-  updateTask(id,data){
-    let list = this.state.taskList;
+
+  const updateTask = (id,data) => {
+    let list = props.data;
       list.filter( (item) => (
         (item.id === id) ? (
           item.edit = !item.edit,
           item.taskName = data )
         : null
       ))
-      this.setState({
-        taskList :[...list ]
-      })
+    props.updateTask(list)
   }
-  changeTaskStatus(id,status){
-    let list = this.state.taskList;
+  const changeTaskStatus = (id,status) => {
+    let list = props.data;
     list.filter( (item) => (
       (item.id === id) ? item.done = status : null
     ))
-    this.setState({
-      taskList :[...list ]
-    })
+    props.changeTaskStatus(list)
   }
-  addTask(data){
-    let list = this.state.taskList
+  const addTask = (data) => {
+    let list = props.data;
     let prevId = list[list.length-1].id;
     let nextId = 'id' + ( Number(prevId.replace(/\D+/g,"")) + 1 );
 
@@ -78,30 +41,24 @@ class TasksList extends Component {
       taskName:data,
       taskDesription:'',
       edit:false,
-      category:this.state.categoryName
+      categoryId:props.selected
     }
-    this.setState({
-      taskList :[ ...list, newTask ]
-    })
-    console.log(this.state)
+    props.addTask(newTask)
   }
-
-  render() {
-    return (
+  return (
     <div className='col-md-7'>
       <div className='tasksList-container'>
         <div className='pull-right'>
-          <InputBlock  action={this.addTask} placeholder='Enter item title'/>
+          <InputBlock  action={addTask} placeholder='Enter item title'/>
         </div>
         <TaskTable
-          taskData={this.state.taskList}
-          updateTask={this.updateTask}
-          changeTask={this.changeTask}
-          changeTaskStatus={this.changeTaskStatus}
+          taskData={props.data}
+          updateTask={updateTask}
+          changeTask={changeTask}
+          changeTaskStatus={changeTaskStatus}
         />
       </div>
     </div>
     );
-  }
 }
 export default TasksList;
