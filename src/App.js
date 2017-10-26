@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedCategory:'',
+      selectedCategoryId:'',
       tasksList:[
         {
           id:'id1',
@@ -48,14 +48,16 @@ class App extends Component {
     this.removeCategory = this.removeCategory.bind(this)
     this.saveChanges = this.saveChanges.bind(this)
     this.selectCategory = this.selectCategory.bind(this)
-    this.addTask = this.addTask.bind(this);
-    this.changeTask = this.changeTask.bind(this);
     this.updateTask = this.updateTask.bind(this);
-    this.changeTaskStatus = this.changeTaskStatus.bind(this);
     this.filterTask = this.filterTask.bind(this);
   }
   addCategory(data){
-    let itemId = this.state.categoriesList.length;
+    let itemId ;
+    if( this.state.categoriesList.length ){
+      itemId = this.state.categoriesList[this.state.categoriesList.length-1].id;
+    }else{
+      itemId = this.state.categoriesList.length
+    }
     let newCategory = {
       id:itemId+1,
       name:data,
@@ -66,9 +68,10 @@ class App extends Component {
       categoriesList:[ ...this.state.categoriesList , newCategory]
     })
     console.log(this.state,'app state')
+    console.log(newCategory.id ,'new item id')
+    console.log(this.state ,'state')
   }
   editCategory(id){
-    console.log(id)
     let newList = this.state.categoriesList.map( (item) => {
         if( item.id === id ){
             item.edit = !item.edit
@@ -83,13 +86,28 @@ class App extends Component {
     console.log('addSub',id)
   }
   removeCategory(id){
-    let newList = this.state.categoriesList.filter( (item) => {
-        if( item.id !== id ){
-          return item
-        }
-      })
+    let newSelectedCategoryId;
+    let newList;
+    let newTaskList;
+      newList = this.state.categoriesList.filter( (item) => {
+          if( item.id !== id ){
+            return item
+          }
+        })
+      newTaskList = this.state.tasksList.filter( (item) => {
+          if( item.categoryId !== id ){
+            return item
+          }
+        })
+      if( id === this.state.selectedCategoryId){
+          newSelectedCategoryId = ''
+      }else{
+        newSelectedCategoryId = this.state.selectedCategoryId
+      }
       this.setState({
-        categoriesList:[...newList]
+        categoriesList:[...newList],
+        selectedCategoryId:newSelectedCategoryId,
+        tasksList :[ ...newTaskList]
       })
   }
 
@@ -107,38 +125,21 @@ class App extends Component {
   }
   selectCategory(id){
     this.setState({
-      selectedCategory:id
+      selectedCategoryId:id
     })
   }
-addTask(data){
-  this.setState({
-    tasksList :[ ...this.state.tasksList, data]
-  })
-}
-changeTask(data){
-  this.setState({
-    taskList :[ ...this.state.tasksList, data]
-  })
-}
+
 updateTask(data){
   this.setState({
     tasksList :[ ...this.state.tasksList, data]
   })
 }
-changeTaskStatus(data){
-  this.setState({
-    taskList :[ ...this.state.tasksList, data]
-  })
-}
-
 filterTask(){
   let selectedTask = this.state.tasksList.filter( (item) => {
-    if( item.categoryId == this.state.selectedCategory ){
+    if( item.categoryId == this.state.selectedCategoryId ){
       return item
     }
   })
-  console.log(selectedTask , 'selectedTask')
-  console.log(this.state)
   return selectedTask
 }
   render() {
@@ -154,16 +155,13 @@ filterTask(){
               saveChanges={this.saveChanges}
               selectCategory={this.selectCategory}
               data={this.state.categoriesList}
-              selected={this.state.selectedCategory}
+              selected={this.state.selectedCategoryId}
             />
-          {this.state.selectedCategory
+          {this.state.selectedCategoryId
             ? <TasksList
                 data={this.filterTask()}
-                selected={this.state.selectedCategory}
-                changeTask={this.changeTask}
+                selected={this.state.selectedCategoryId}
                 updateTask={this.updateTask}
-                changeTaskStatus={this.changeTaskStatus}
-                addTask={this.addTask}
             />
             : null
           }

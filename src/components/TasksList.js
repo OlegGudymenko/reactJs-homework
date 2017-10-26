@@ -10,7 +10,7 @@ const TasksList = (props) => {
     list.filter( (item) => (
       (item.id === id) ? item.edit = !item.edit : null
     ))
-    props.changeTask(list)
+    props.updateTask(list)
   }
 
   const updateTask = (id,data) => {
@@ -28,13 +28,18 @@ const TasksList = (props) => {
     list.filter( (item) => (
       (item.id === id) ? item.done = status : null
     ))
-    props.changeTaskStatus(list)
+    props.updateTask(list)
   }
   const addTask = (data) => {
-    let list = props.data;
-    let prevId = list[list.length-1].id;
-    let nextId = 'id' + ( Number(prevId.replace(/\D+/g,"")) + 1 );
+    let prevId;
+    let nextId;
 
+    if(props.data.length){
+      prevId = props.data[props.data.length-1].id;
+      nextId = 'id' + ( Number(prevId.replace(/\D+/g,"")) + 1 );
+    }else{
+      nextId = 'id1'
+    }
     let newTask = {
       id:nextId,
       done:false,
@@ -43,7 +48,7 @@ const TasksList = (props) => {
       edit:false,
       categoryId:props.selected
     }
-    props.addTask(newTask)
+    props.updateTask(newTask)
   }
   return (
     <div className='col-md-7'>
