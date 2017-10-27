@@ -29,6 +29,7 @@ class ListItem extends Component {
       selectCategory,
       editCategory,
       addSubCategory,
+      createSubCategory,
       removeCategory,
       selected
     } = this.props
@@ -59,7 +60,7 @@ class ListItem extends Component {
             />
           }
           <BtnIcon
-            action={() => { addSubCategory(data.id) }}
+            action={() => { createSubCategory(data.id) }}
             type='add'
           />
           <BtnIcon

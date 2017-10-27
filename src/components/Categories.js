@@ -8,7 +8,7 @@ const Categories = (props) => {
     data,
     selectCategory,
     editCategory,
-    addSubCategory,
+    createSubCategory,
     removeCategory,
     addCategory,
     saveChanges,
@@ -30,7 +30,7 @@ const Categories = (props) => {
                     selectCategory={(id) => selectCategory(id)}
                     saveChanges={(id,data) => saveChanges(item.id,data)}
                     editCategory={(id) => editCategory(id)}
-                    addSubCategory={(id) => addSubCategory(id)}
+                    createSubCategory={(id) => createSubCategory(id)}
                     removeCategory={(id) => removeCategory( id)}
                   />
                 )

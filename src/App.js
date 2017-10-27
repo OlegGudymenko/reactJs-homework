@@ -39,12 +39,37 @@ class App extends Component {
           name:'redux',
           parent:null,
           edit:false,
+        },
+        {
+          id:2.1,
+          name:'redux2.1',
+          parent:2,
+          edit:false,
+        },
+        {
+          id:2.2,
+          name:'redux2.2',
+          parent:2,
+          edit:false,
+        },
+        {
+          id:1.1,
+          name:'react1.1',
+          parent:1,
+          edit:false,
+        },
+        {
+          id:1.2,
+          name:'react1.2',
+          parent:1,
+          edit:false,
         }
       ]
     }
     this.addCategory = this.addCategory.bind(this)
     this.editCategory = this.editCategory.bind(this)
     this.addSubCategory = this.addSubCategory.bind(this)
+    this.createSubCategory = this.createSubCategory.bind(this)
     this.removeCategory = this.removeCategory.bind(this)
     this.saveChanges = this.saveChanges.bind(this)
     this.selectCategory = this.selectCategory.bind(this)
@@ -67,9 +92,9 @@ class App extends Component {
     this.setState({
       categoriesList:[ ...this.state.categoriesList , newCategory]
     })
-    console.log(this.state,'app state')
-    console.log(newCategory.id ,'new item id')
-    console.log(this.state ,'state')
+    // console.log(this.state,'app state')
+    // console.log(newCategory.id ,'new item id')
+    // console.log(this.state ,'state')
   }
   editCategory(id){
     let newList = this.state.categoriesList.map( (item) => {
@@ -82,8 +107,63 @@ class App extends Component {
       categoriesList:[...newList]
     })
   }
-  addSubCategory(id){
-    console.log('addSub',id)
+  createSubCategory(parentId){
+    // console.log(parentId , 'createSub')
+    const data = 'testCat'
+    this.addSubCategory(parentId,data);
+  }
+  addSubCategory(parentId,data){
+    let listState = this.state.categoriesList;
+    let newId ;
+    let newCategory;
+    let filterList
+    filterList = this.state.categoriesList.filter( (item , index) => {
+        if( item.parent === parentId){
+          console.log(item.parent , 'item.parent')
+              return item
+        }
+      })
+      if( filterList.length > 0 ){
+        let idArr = (filterList[filterList.length-1].id).toString().split('.')
+        idArr[idArr.length - 1] = Number(idArr[idArr.length - 1]) + 1
+        newId = idArr.join('.')
+        newCategory = {
+          id:parseFloat(newId),
+          name:data,
+          parent:parentId,
+          edit:false,
+        }
+      }else{
+          newId = parentId  + '.' + 1;
+          newCategory = {
+            id:parseFloat(newId),
+            name:data,
+            parent:parentId,
+            edit:false,
+          }
+      }
+
+
+
+
+      //  if( listState[key].parent == parentId ){
+      // console.log(listState[key] , 'listState[key]')
+      //     // newId =  listState[key].id + 1
+      //      console.log('parent id ', parentId , newId , 'newId')
+      //  }
+
+    // let itemId = parentId  + '.' + id;
+
+    // let newCategory = {
+    //   id:itemId+1,
+    //   name:data,
+    //   parent:parentId,
+    //   edit:false,
+    // }
+    // this.setState({
+    //   categoriesList:[ ...this.state.categoriesList , newCategory]
+    // })
+    // console.log('addSub',id)
   }
   removeCategory(id){
     let newSelectedCategoryId;
@@ -150,7 +230,7 @@ filterTask(){
             <Categories
               addCategory={this.addCategory}
               editCategory={this.editCategory}
-              addSubCategory={this.addSubCategory}
+              createSubCategory ={this.createSubCategory }
               removeCategory={this.removeCategory}
               saveChanges={this.saveChanges}
               selectCategory={this.selectCategory}
