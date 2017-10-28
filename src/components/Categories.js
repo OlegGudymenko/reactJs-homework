@@ -14,27 +14,62 @@ const Categories = (props) => {
     saveChanges,
     selected,
     } = props
+
+    const renderSubList = (itemId) => {
+      if( itemId ){
+        return(
+          <ul className="sub-menu">
+            {data.map( (subItem) => {
+              if(itemId == subItem.parent){
+                return(
+                  <ListItem
+                    key={subItem.id}
+                    data={subItem}
+                    selected={selected}
+                    className={''}
+                    selectCategory={(id) => selectCategory(id)}
+                    saveChanges={(id,data) => saveChanges(subItem.id,data)}
+                    editCategory={(id) => editCategory(id)}
+                    createSubCategory={(id) => createSubCategory(id)}
+                    removeCategory={(id) => removeCategory( id)}>
+                    {renderSubList(subItem.id ,subItem)}
+                  </ListItem>
+                  )
+                }else{return }
+            })
+          }
+          </ul>
+        )
+      }else{
+        return
+      }
+    }
     return (
       <div className='col-md-5'>
         <div className='categories-container'>
           <InputBlock
             action={(data) => { addCategory(data) }}
             placeholder='Enter category title' />
-            <ul className="list-group">
+          <ul className="main-category-list">
               {data.map( (item) => {
-                return(
-                  <ListItem
-                    key={item.id}
-                    data={item}
-                    selected={selected}
-                    selectCategory={(id) => selectCategory(id)}
-                    saveChanges={(id,data) => saveChanges(item.id,data)}
-                    editCategory={(id) => editCategory(id)}
-                    createSubCategory={(id) => createSubCategory(id)}
-                    removeCategory={(id) => removeCategory( id)}
-                  />
-                )
-              })}
+                if(!item.parent){
+                  return(
+                    <ListItem
+                      key={item.id}
+                      data={item}
+                      selected={selected}
+                      className={''}
+                      selectCategory={(id) => selectCategory(id)}
+                      saveChanges={(id,data) => saveChanges(item.id,data)}
+                      editCategory={(id) => editCategory(id)}
+                      createSubCategory={(id) => createSubCategory(id)}
+                      removeCategory={(id) => removeCategory( id)}>
+                      {renderSubList(item.id ,item)}
+                    </ListItem>
+                  )
+                }
+              }
+            )}
             </ul>
         </div>
       </div>

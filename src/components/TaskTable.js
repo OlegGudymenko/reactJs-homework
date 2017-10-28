@@ -6,9 +6,9 @@ const TaskTable = (props) => {
     <table className="table table-bordered task-table">
       <thead>
         <tr>
-          <th>Is Done</th>
-          <th>Task Name</th>
-          <th>icon</th>
+          <th>Done</th>
+          <th>Task</th>
+          <th>Edit</th>
         </tr>
       </thead>
       <tbody>

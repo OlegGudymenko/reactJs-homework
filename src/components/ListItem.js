@@ -31,11 +31,13 @@ class ListItem extends Component {
       addSubCategory,
       createSubCategory,
       removeCategory,
-      selected
+      selected,
+      className,
+      children
     } = this.props
     return(
-      <li
-        className={`list-group-item clearfix ${selected == data.id ? `selected` : `` }`}>
+    <li>
+      <div className={`list-item clearfix ${selected == data.id ? `selected` : `` }`}>
         {data.edit ?
           <input
             type="text"
@@ -68,7 +70,9 @@ class ListItem extends Component {
             type='remove'
           />
         </div>
-      </li>
+      </div>
+      {children}
+    </li>
     )
 
   }

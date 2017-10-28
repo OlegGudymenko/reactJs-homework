@@ -29,39 +29,51 @@ class App extends Component {
       ],
       categoriesList:[
         {
-          id:1,
+          id:'1',
           name:'react',
           parent:null,
           edit:false,
         },
         {
-          id:2,
+          id:'2',
           name:'redux',
           parent:null,
           edit:false,
         },
         {
-          id:2.1,
+          id:'2.1',
           name:'redux2.1',
-          parent:2,
+          parent:'2',
           edit:false,
         },
         {
-          id:2.2,
+          id:'2.2',
           name:'redux2.2',
-          parent:2,
+          parent:'2',
           edit:false,
         },
         {
-          id:1.1,
+          id:'2.1.1',
+          name:'redux2.2.1',
+          parent:'2.1',
+          edit:false,
+        },
+        {
+          id:'2.1.1.1',
+          name:'redux2.2.1.1',
+          parent:'2.1.1',
+          edit:false,
+        },
+        {
+          id:'1.1',
           name:'react1.1',
-          parent:1,
+          parent:'1',
           edit:false,
         },
         {
-          id:1.2,
+          id:'1.2',
           name:'react1.2',
-          parent:1,
+          parent:'1',
           edit:false,
         }
       ]
@@ -92,9 +104,9 @@ class App extends Component {
     this.setState({
       categoriesList:[ ...this.state.categoriesList , newCategory]
     })
-    // console.log(this.state,'app state')
-    // console.log(newCategory.id ,'new item id')
-    // console.log(this.state ,'state')
+      // console.log(this.state,'app state')
+      // console.log(newCategory.id ,'new item id')
+      // console.log(this.state ,'state')
   }
   editCategory(id){
     let newList = this.state.categoriesList.map( (item) => {
@@ -108,7 +120,6 @@ class App extends Component {
     })
   }
   createSubCategory(parentId){
-    // console.log(parentId , 'createSub')
     const data = 'testCat'
     this.addSubCategory(parentId,data);
   }
@@ -134,7 +145,7 @@ class App extends Component {
           edit:false,
         }
       }else{
-          newId = parentId  + '.' + 1;
+          newId = Number(parentId) + '.' + 1;
           newCategory = {
             id:parseFloat(newId),
             name:data,
@@ -142,28 +153,6 @@ class App extends Component {
             edit:false,
           }
       }
-
-
-
-
-      //  if( listState[key].parent == parentId ){
-      // console.log(listState[key] , 'listState[key]')
-      //     // newId =  listState[key].id + 1
-      //      console.log('parent id ', parentId , newId , 'newId')
-      //  }
-
-    // let itemId = parentId  + '.' + id;
-
-    // let newCategory = {
-    //   id:itemId+1,
-    //   name:data,
-    //   parent:parentId,
-    //   edit:false,
-    // }
-    // this.setState({
-    //   categoriesList:[ ...this.state.categoriesList , newCategory]
-    // })
-    // console.log('addSub',id)
   }
   removeCategory(id){
     let newSelectedCategoryId;
