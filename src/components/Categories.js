@@ -9,30 +9,34 @@ const Categories = (props) => {
     selectCategory,
     editCategory,
     createSubCategory,
+    saveSubCategory,
     removeCategory,
     addCategory,
     saveChanges,
     selected,
     } = props
 
-    const renderSubList = (itemId) => {
-      if( itemId ){
+    const renderSubList = (itemId,hasChild) => {
+      console.log(hasChild,'has child')
+        console.log(itemId,'Item ID')
+      // debugger
+      if( hasChild ){
         return(
           <ul className="sub-menu">
-            {data.map( (subItem) => {
-              if(itemId == subItem.parent){
+            {data.map( (item) => {
+              if(itemId == item.parent){
                 return(
                   <ListItem
-                    key={subItem.id}
-                    data={subItem}
+                    key={item.id}
+                    data={item}
                     selected={selected}
-                    className={''}
                     selectCategory={(id) => selectCategory(id)}
-                    saveChanges={(id,data) => saveChanges(subItem.id,data)}
+                    saveChanges={(id,data) => saveChanges(item.id,data)}
                     editCategory={(id) => editCategory(id)}
                     createSubCategory={(id) => createSubCategory(id)}
+                    saveSubCategory={(id,data) => saveSubCategory(id,data)}
                     removeCategory={(id) => removeCategory( id)}>
-                    {renderSubList(subItem.id ,subItem)}
+                    {item.child ? renderSubList(item.id , item.child) : null}
                   </ListItem>
                   )
                 }else{return }
@@ -63,8 +67,9 @@ const Categories = (props) => {
                       saveChanges={(id,data) => saveChanges(item.id,data)}
                       editCategory={(id) => editCategory(id)}
                       createSubCategory={(id) => createSubCategory(id)}
+                      saveSubCategory={(id,data) => saveSubCategory(id,data)}
                       removeCategory={(id) => removeCategory( id)}>
-                      {renderSubList(item.id ,item)}
+                      {renderSubList(item.id ,item.child)}
                     </ListItem>
                   )
                 }

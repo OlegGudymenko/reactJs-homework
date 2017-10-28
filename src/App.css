@@ -78,6 +78,12 @@ ul li{
 .sub-menu{
   margin-left:20px;
 }
+.main-category-list .btn-input-container input{
+  width:84%;
+}
+.main-category-list h4{
+  margin-bottom: 0px!important;
+}
 .tasksList-container .btn-input-container input {
   width:82%;
 }

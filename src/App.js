@@ -32,56 +32,72 @@ class App extends Component {
           id:'1',
           name:'react',
           parent:null,
+          child:true,
           edit:false,
+          addChild:false,
         },
         {
           id:'2',
           name:'redux',
           parent:null,
+          child:true,
           edit:false,
+          addChild:false,
         },
         {
           id:'2.1',
           name:'redux2.1',
           parent:'2',
+          child:true,
           edit:false,
+          addChild:false,
         },
         {
           id:'2.2',
           name:'redux2.2',
           parent:'2',
+          child:false,
           edit:false,
+          addChild:false,
         },
         {
           id:'2.1.1',
           name:'redux2.2.1',
           parent:'2.1',
+          child:true,
           edit:false,
+          addChild:false,
         },
         {
           id:'2.1.1.1',
           name:'redux2.2.1.1',
           parent:'2.1.1',
+          child:false,
           edit:false,
+          addChild:false,
         },
         {
           id:'1.1',
           name:'react1.1',
           parent:'1',
+          child:false,
           edit:false,
+          addChild:false,
         },
         {
           id:'1.2',
           name:'react1.2',
           parent:'1',
+          child:false,
           edit:false,
+          addChild:false,
         }
       ]
     }
     this.addCategory = this.addCategory.bind(this)
     this.editCategory = this.editCategory.bind(this)
-    this.addSubCategory = this.addSubCategory.bind(this)
     this.createSubCategory = this.createSubCategory.bind(this)
+    this.saveSubCategory = this.saveSubCategory.bind(this)
     this.removeCategory = this.removeCategory.bind(this)
     this.saveChanges = this.saveChanges.bind(this)
     this.selectCategory = this.selectCategory.bind(this)
@@ -99,6 +115,8 @@ class App extends Component {
       id:itemId+1,
       name:data,
       parent:null,
+      child:false,
+      addChild:false,
       edit:false,
     }
     this.setState({
@@ -120,10 +138,25 @@ class App extends Component {
     })
   }
   createSubCategory(parentId){
-    const data = 'testCat'
-    this.addSubCategory(parentId,data);
+    debugger
+    let itemIndex ;
+    let newItem = this.state.categoriesList.filter( (item,index) => {
+      if(item.id == parentId){
+        item.addChild = !item.addChild
+        item.child = true
+        itemIndex = index
+        return item
+      }
+    })
+    this.setState({
+
+      categoriesList :[...this.state.categoriesList, ...newItem[0]]
+    })
+    // console.log(this.state.categoriesList , 'state')
+    // console.log(  newItem , '  newItemState', itemIndex , 'itemIndex')
+
   }
-  addSubCategory(parentId,data){
+  saveSubCategory(parentId,data){
     let listState = this.state.categoriesList;
     let newId ;
     let newCategory;
@@ -139,20 +172,30 @@ class App extends Component {
         idArr[idArr.length - 1] = Number(idArr[idArr.length - 1]) + 1
         newId = idArr.join('.')
         newCategory = {
-          id:parseFloat(newId),
+          id:newId+'',
           name:data,
           parent:parentId,
           edit:false,
+          addChild:false,
+          child:false,
         }
       }else{
-          newId = Number(parentId) + '.' + 1;
+          newId = parentId + '.' + 1;
           newCategory = {
-            id:parseFloat(newId),
+            id:parseFloat(newId)+'',
             name:data,
             parent:parentId,
             edit:false,
+            addChild:false,
+            child:false,
           }
       }
+      this.createSubCategory(parentId)
+      this.setState({
+        categoriesList :[...this.state.categoriesList, newCategory]
+      })
+      console.log(newCategory,'new sub cat')
+      console.log(this.state.categoriesList , 'cat kust')
   }
   removeCategory(id){
     let newSelectedCategoryId;
@@ -219,7 +262,8 @@ filterTask(){
             <Categories
               addCategory={this.addCategory}
               editCategory={this.editCategory}
-              createSubCategory ={this.createSubCategory }
+              createSubCategory ={this.createSubCategory}
+              saveSubCategory={this.saveSubCategory}
               removeCategory={this.removeCategory}
               saveChanges={this.saveChanges}
               selectCategory={this.selectCategory}

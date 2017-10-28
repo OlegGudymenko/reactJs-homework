@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import BtnIcon from './BtnIcon';
+import InputBlock from './InputBlock';
 
 class ListItem extends Component {
   constructor(props){
@@ -28,7 +29,7 @@ class ListItem extends Component {
       data,
       selectCategory,
       editCategory,
-      addSubCategory,
+      saveSubCategory,
       createSubCategory,
       removeCategory,
       selected,
@@ -71,6 +72,15 @@ class ListItem extends Component {
           />
         </div>
       </div>
+      { data.addChild
+        ? <div>
+            <h4>Create new sub Category</h4>
+          <InputBlock
+            action={(text) => { saveSubCategory(data.id, text) }}/>
+          </div>
+        : null
+
+      }
       {children}
     </li>
     )
