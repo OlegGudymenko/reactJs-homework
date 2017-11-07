@@ -1,28 +1,44 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import BtnIcon from './BtnIcon';
 import InputBlock from './InputBlock';
+import {
+ selectCategory,
+ editCategory,
+ createSubCategory,
+ saveSubCategory,
+ saveCategoryChanges,
+ removeCategory
+} from '../actions/categories'
+
 
 class ListItem extends Component {
   constructor(props){
     super(props)
     this.state = {
-      inputValue: ''
+      value: ''
     }
     this.inputChange = this.inputChange.bind(this);
-    this.saveChanges = this.saveChanges.bind(this);
+    this.getCatById = this.getCatById.bind(this);
   }
-  componentWillMount(){
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      inputValue:this.props.data.name
+      value: nextProps.data.name
     })
   }
-  saveChanges(id){
-    this.props.saveChanges(id , this.state.inputValue)
-  }
+
   inputChange(e){
     this.setState({
-      inputValue : e.target.value
+      value : e.target.value
     })
+  }
+  getCatById(source, id) {
+  for (let i = 0; i < source.length; i++) {
+      if (source[i].id === id) {
+          return source[i];
+        }
+    }
   }
   render(){
     const {
@@ -32,28 +48,36 @@ class ListItem extends Component {
       saveSubCategory,
       createSubCategory,
       removeCategory,
-      selected,
-      className,
-      children
+      saveCategoryChanges,
+      selectedCategory,
+      children,
+      source
     } = this.props
+
+    const shouldRenderChildren = !!data.child.length;
+    // debugger
+    console.log(data.child,'data chidl',data,'data')
+    const subTree = data.child.map(id => this.getCatById(source, id));
+    console.log(subTree,'subTree')
     return(
     <li>
-      <div className={`list-item clearfix ${selected == data.id ? `selected` : `` }`}>
+      <div className={`list-item clearfix ${selectedCategory == data.id ? `selected` : `` }`}>
         {data.edit ?
           <input
             type="text"
-            value={this.state.inputValue}
+            value={this.state.value}
             onChange={this.inputChange}
           />
         :
         <span
           className='task-name pull-left'
-          onClick={ () => selectCategory(data.id)}
-          >{data.name}</span> }
+          onClick={ () => selectCategory(data.id)}>
+            {data.name}
+        </span> }
         <div className="btn-group pull-right">
           {data.edit ?
             <BtnIcon
-              action={this.saveChanges}
+              action={() => { saveCategoryChanges(data.id, this.state.value) }}
               type='save'
             />
           :
@@ -81,11 +105,40 @@ class ListItem extends Component {
         : null
 
       }
-      {children}
+      {/* {
+        shouldRenderChildren && (
+          <ul className="main-category-list">
+              {subTree.map( (item) => {
+                  return(
+                    <ListItem
+                      key={item.id}
+                      data={subTree}
+                      source={source}/>
+                  )
+              }
+            )}
+            </ul>
+          )
+      } */}
     </li>
     )
 
   }
 }
 
-export default ListItem;
+const mapStateToProps = (state) => ({
+    selectedCategory: state.selectedCategory,
+    categoriesList: state.categoriesList,
+  })
+
+const mapDispatchToProps = (dispatch) => ({
+    selectCategory: (data) => dispatch(selectCategory(data)),
+    editCategory: (data) => dispatch(editCategory(data)),
+    createSubCategory: (data) => dispatch(createSubCategory(data)),
+    removeCategory: (id) => dispatch(removeCategory(id)),
+    saveSubCategory: (data) => dispatch(saveSubCategory(data)),
+    saveCategoryChanges: (id,data) => dispatch(saveCategoryChanges(id,data)),
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListItem)
