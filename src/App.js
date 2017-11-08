@@ -14,8 +14,8 @@ const App = (props) =>  {
       <div className='container'>
         <div className='row'>
           <Categories />
-          {selectedCategory ? <TasksList/> : null }
-      </div>
+            {selectedCategory ? <TasksList/> : null }
+        </div>
       </div>
     </div>
   )

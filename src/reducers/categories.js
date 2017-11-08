@@ -22,16 +22,17 @@ const initialState = [
       parent:null,
       edit:false,
       addChild:false,
-      child:['3']
+      child:['2.1']
     },
     {
-      id:'3',
-      name:'redux',
+      id:'2.1',
+      name:'redux3',
       parent:'1',
       edit:false,
       addChild:false,
       child:[]
     },
+
 ]
 
 export const categoriesList = (state = initialState, action) => {
@@ -68,17 +69,17 @@ export const categoriesList = (state = initialState, action) => {
       }
       break;
       case CREATE_SUB_CATEGORY:{
+        // debugger
         let itemIndex ;
         let newItem = state.filter( (item,index) => {
           if(item.id == action.payload ){
             item.addChild = !item.addChild
-            item.child = true
             itemIndex = index
             return item
           }
         })
         return(
-          [...state, newItem]
+          [...state, ...newItem[0]]
         )
       }
       break;
@@ -126,10 +127,12 @@ export const categoriesList = (state = initialState, action) => {
         let newList;
         let newTaskList;
           newList = state.filter( (item) => {
-              if( item.id !== action.payload ){
-                return item
-              }
-            })
+            // if( item.id === action.payload.parent ){
+            // }
+            if( item.id !== action.payload.id ){
+              return item
+            }
+          })
           return newList
       }
       break;

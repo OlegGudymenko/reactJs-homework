@@ -13,6 +13,8 @@ import {
 } from '../actions/categories'
 
 
+// import * as Actions from '../actions/categories'
+
 class ListItem extends Component {
   constructor(props){
     super(props)
@@ -23,9 +25,11 @@ class ListItem extends Component {
     this.getCatById = this.getCatById.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      value: nextProps.data.name
-    })
+    if (nextProps.data.name !== this.props.data.name) {
+      this.setState({
+        value: nextProps.data.name
+      })
+    }
   }
 
   inputChange(e){
@@ -34,31 +38,33 @@ class ListItem extends Component {
     })
   }
   getCatById(source, id) {
-  for (let i = 0; i < source.length; i++) {
-      if (source[i].id === id) {
-          return source[i];
-        }
+    for (let i = 0; i < source.length; i++) {
+        if (source[i].id === id) {
+            return source[i];
+          }
+      }
     }
-  }
-  render(){
+  render() {
+    console.log(this.props);
     const {
       data,
       selectCategory,
       editCategory,
       saveSubCategory,
-      createSubCategory,
       removeCategory,
       saveCategoryChanges,
       selectedCategory,
+      createSubCategory,
       children,
       source
-    } = this.props
+    } = this.props;
+
+    // const { createSubCategory } = this.props.categoriesActions;
 
     const shouldRenderChildren = !!data.child.length;
-    // debugger
-    console.log(data.child,'data chidl',data,'data')
-    const subTree = data.child.map(id => this.getCatById(source, id));
-    console.log(subTree,'subTree')
+    const subTree = data.child.map((item) => {
+      return  this.getCatById(source, item)
+    })
     return(
     <li>
       <div className={`list-item clearfix ${selectedCategory == data.id ? `selected` : `` }`}>
@@ -91,7 +97,7 @@ class ListItem extends Component {
             type='add'
           />
           <BtnIcon
-            action={() => { removeCategory(data.id) }}
+            action={() => { removeCategory(data.id, data.parent) }}
             type='remove'
           />
         </div>
@@ -99,27 +105,25 @@ class ListItem extends Component {
       { data.addChild
         ? <div>
             <h4>Create new sub Category</h4>
-          <InputBlock
-            action={(text) => { saveSubCategory(data.id, text) }}/>
+            <InputBlock action={(text) => { saveSubCategory(data.id, text) }} />
           </div>
         : null
-
       }
-      {/* {
+      {
         shouldRenderChildren && (
-          <ul className="main-category-list">
+          <ul >
               {subTree.map( (item) => {
                   return(
                     <ListItem
                       key={item.id}
-                      data={subTree}
+                      data={item}
                       source={source}/>
                   )
               }
             )}
             </ul>
           )
-      } */}
+      }
     </li>
     )
 
@@ -130,13 +134,16 @@ const mapStateToProps = (state) => ({
     selectedCategory: state.selectedCategory,
     categoriesList: state.categoriesList,
   })
-
+//
+// const mapDispatchToProps = (dispatch) => ({
+//   categoriesActions: bindActionCreators(Actions, dispatch)
+// })
 const mapDispatchToProps = (dispatch) => ({
     selectCategory: (data) => dispatch(selectCategory(data)),
     editCategory: (data) => dispatch(editCategory(data)),
-    createSubCategory: (data) => dispatch(createSubCategory(data)),
-    removeCategory: (id) => dispatch(removeCategory(id)),
-    saveSubCategory: (data) => dispatch(saveSubCategory(data)),
+    createSubCategory: (parentId) => dispatch(createSubCategory(parentId)),
+    removeCategory: (id,parentId) => dispatch(removeCategory(id,parentId)),
+    saveSubCategory: (id,data) => dispatch(saveSubCategory(id.data)),
     saveCategoryChanges: (id,data) => dispatch(saveCategoryChanges(id,data)),
 })
 
