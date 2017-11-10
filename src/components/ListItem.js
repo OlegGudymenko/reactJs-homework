@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import BtnIcon from './BtnIcon';
 import InputBlock from './InputBlock';
-import {
- selectCategory,
- editCategory,
- createSubCategory,
- saveSubCategory,
- saveCategoryChanges,
- removeCategory
-} from '../actions/categories'
-
-
-// import * as Actions from '../actions/categories'
 
 class ListItem extends Component {
   constructor(props){
@@ -25,11 +12,9 @@ class ListItem extends Component {
     this.getCatById = this.getCatById.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data.name !== this.props.data.name) {
       this.setState({
         value: nextProps.data.name
       })
-    }
   }
 
   inputChange(e){
@@ -50,16 +35,15 @@ class ListItem extends Component {
       data,
       selectCategory,
       editCategory,
-      saveSubCategory,
       removeCategory,
       saveCategoryChanges,
       selectedCategory,
       createSubCategory,
+      saveSubCategory,
       children,
       source
     } = this.props;
 
-    // const { createSubCategory } = this.props.categoriesActions;
 
     const shouldRenderChildren = !!data.child.length;
     const subTree = data.child.map((item) => {
@@ -105,7 +89,7 @@ class ListItem extends Component {
       { data.addChild
         ? <div>
             <h4>Create new sub Category</h4>
-            <InputBlock action={(text) => { saveSubCategory(data.id, text) }} />
+          <InputBlock action={(text) => { saveSubCategory(data.id,  text) }} />
           </div>
         : null
       }
@@ -117,7 +101,16 @@ class ListItem extends Component {
                     <ListItem
                       key={item.id}
                       data={item}
-                      source={source}/>
+                      source={source}
+                      selectedCategory={selectedCategory}
+                      selectCategory={ (id) => selectCategory(id)}
+                      editCategory={(id) => { editCategory(id) }}
+                      saveCategoryChanges={(id, text) => { saveCategoryChanges(id, text) }}
+                      createSubCategory={(id) => { createSubCategory(id) }}
+                      saveSubCategory={(id, parentId, text) => { saveSubCategory(id, parentId, text) }}
+                      removeCategory={(id, parentId) => { removeCategory(id, parentId) }}
+
+                    />
                   )
               }
             )}
@@ -129,23 +122,4 @@ class ListItem extends Component {
 
   }
 }
-
-const mapStateToProps = (state) => ({
-    selectedCategory: state.selectedCategory,
-    categoriesList: state.categoriesList,
-  })
-//
-// const mapDispatchToProps = (dispatch) => ({
-//   categoriesActions: bindActionCreators(Actions, dispatch)
-// })
-const mapDispatchToProps = (dispatch) => ({
-    selectCategory: (data) => dispatch(selectCategory(data)),
-    editCategory: (data) => dispatch(editCategory(data)),
-    createSubCategory: (parentId) => dispatch(createSubCategory(parentId)),
-    removeCategory: (id,parentId) => dispatch(removeCategory(id,parentId)),
-    saveSubCategory: (id,data) => dispatch(saveSubCategory(id.data)),
-    saveCategoryChanges: (id,data) => dispatch(saveCategoryChanges(id,data)),
-})
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(ListItem)
+ export default ListItem

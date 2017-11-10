@@ -16,10 +16,10 @@ export const createSubCategory = (parentId) => ({
     payload: parentId
   }
 )
-export const saveSubCategory = (parentId,data) => ({
+export const saveSubCategory = (id,data) => ({
     type: actionsType.SAVE_SUB_CATEGORY,
     payload: {
-      parentId: parentId,
+      itemId: id,
       data: data
     }
   }
@@ -27,8 +27,8 @@ export const saveSubCategory = (parentId,data) => ({
 export const removeCategory = (id,parentId) => ({
     type: actionsType.REMOVE_CATEGORY,
     payload: {
-      id:id,
-      parent:parentId
+      itemId:id,
+      parentId:parentId
     }
   }
 )

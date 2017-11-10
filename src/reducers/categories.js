@@ -27,7 +27,7 @@ const initialState = [
     {
       id:'2.1',
       name:'redux3',
-      parent:'1',
+      parent:'2',
       edit:false,
       addChild:false,
       child:[]
@@ -69,7 +69,6 @@ export const categoriesList = (state = initialState, action) => {
       }
       break;
       case CREATE_SUB_CATEGORY:{
-        // debugger
         let itemIndex ;
         let newItem = state.filter( (item,index) => {
           if(item.id == action.payload ){
@@ -84,54 +83,43 @@ export const categoriesList = (state = initialState, action) => {
       }
       break;
       case SAVE_SUB_CATEGORY:{
-        let listState = state;
-        let newId ;
-        let newCategory;
-        let filterList
-        filterList = state.filter( (item , index) => {
-            if( item.parent === action.payload[0]){
-              console.log(item.parent , 'item.parent')
-                  return item
-            }
-          })
-          if( filterList.length > 0 ){
-            let idArr = (filterList[filterList.length-1].id).toString().split('.')
-            idArr[idArr.length - 1] = Number(idArr[idArr.length - 1]) + 1
-            newId = idArr.join('.')
-            newCategory = {
-              id:newId+'',
-              name:action.payload[1],
-              parent:action.payload[0],
-              edit:false,
-              addChild:false,
-              child:false,
-            }
-          }else{
-              newId = action.payload[0] + '.' + 1;
-              newCategory = {
-                id:parseFloat(newId)+'',
-                name:action.payload[1],
-                parent:action.payload[0],
-                edit:false,
-                addChild:false,
-                child:false,
-              }
+        let newId, childlength, newCategory, newState
+        const itemId = action.payload.itemId
+        const data = action.payload.data
+
+        newState = state.map( (item) => {
+          if( item.id === itemId ){
+            childlength = item.child.length + 1
+            newId = (itemId + '.' + childlength ).toString()
+            item.addChild = !item.addChild
           }
-        return(
-          [...state, newCategory]
+          return item
+        })
+        newCategory = {
+          id: newId,
+          name: data,
+          parent: itemId,
+          edit: false,
+          addChild: false,
+          child: [],
+        }
+
+       newState = [...newState, ...newCategory ]
+        return (
+          [...state, ...newState ]
         )
       }
       break;
       case REMOVE_CATEGORY:{
-        let newSelectedCategoryId;
-        let newList;
-        let newTaskList;
-          newList = state.filter( (item) => {
-            // if( item.id === action.payload.parent ){
-            // }
-            if( item.id !== action.payload.id ){
+        let newList = state.filter( (item) => {
+            if( item.id !== action.payload.itemId ){
               return item
             }
+          }).map( (item) => {
+            if( item.child.indexOf(action.payload.itemId) != -1 ){
+              item.child.splice(item.child.indexOf(action.payload.itemId), 1)
+            }
+            return item
           })
           return newList
       }

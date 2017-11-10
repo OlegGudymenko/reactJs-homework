@@ -7,7 +7,7 @@ import Categories from './components/Categories';
 
 const App = (props) =>  {
   const{ selectedCategory } = props
-  console.log(selectedCategory, 'props id')
+  // console.log(selectedCategory, 'props id')
 
   return(
     <div className="App">
