@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import TableRow from './TableRow';
 
 const TaskTable = (props) => {
+  const {
+    changeTask,
+    updateTask,
+    changeTaskStatus
+  } = props
   return(
     <table className="table table-bordered task-table">
       <thead>
@@ -15,11 +20,11 @@ const TaskTable = (props) => {
         {
           props.taskData.map( (item) => (
             <TableRow
-              item={item}
+              data={item}
               key={item.id}
-              changeTask={(id,data) => { props.changeTask(id,data) }}
-              updateTask={(id,data) => { props.updateTask(id, data) }}
-              changeTaskStatus={(id,data) => { props.changeTaskStatus(id,data) }}
+              changeTask={(id) => { changeTask(id) }}
+              updateTask={(id, data) => { updateTask(id, data) }}
+              changeTaskStatus={(id) => { changeTaskStatus(id) }}
             />
           ))
         }

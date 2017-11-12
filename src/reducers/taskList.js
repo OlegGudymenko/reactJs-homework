@@ -5,28 +5,64 @@ import {
     CHANGE_TASK_STATUS,
     REMOVE_CATEGORY,
   } from '../actions/constants'
-const initialState = []
+
+const initialState = [
+  {
+    id:'task1',
+    done:true,
+    taskName:'learn react',
+    taskDesription:'some text',
+    edit:false,
+    categoryId:'1'
+  },
+  {
+    id:'task2',
+    done:false,
+    taskName:'learn reudx',
+    taskDesription:'some text',
+    edit:false,
+    categoryId:'1'
+  },
+]
 
 export const taskList = (state = initialState , action) => {
   switch (action.type) {
     case ADD_TASK: {
-      return state
+      const { data, categoryId } = action.payload
+
+      let newTask = {
+        id:'task' + (state.length + 1 ),
+        done:false,
+        taskName:data,
+        taskDesription:'',
+        edit:false,
+        categoryId:categoryId
+      }
+      return [...state, newTask]
     }
     break;
     case CHANGE_TASK: {
-      return state
+      const task = state.find( (item) => (item.id === action.payload) )
+        task.edit= !task.edit
+      return [...state, ...task]
     }
     break;
     case UPDATE_TASK: {
-      return state
+      const { taskId, data } = action.payload
+      const task = state.find( (item) => (item.id === taskId) )
+        task.edit= !task.edit
+        task.taskName = data
+      return [...state, ...task]
     }
     break;
-    case CHANGE_TASK_STATUS: {
-      return state
+    case CHANGE_TASK_STATUS:  {
+      const task = state.find( (item) => (item.id === action.payload) )
+        task.done = !task.done
+      return [...state, ...task]
     }
     break;
     case REMOVE_CATEGORY: {
-      const  newList = state.filter( (item) => {
+      const newList = state.filter( (item) => {
             if( item.categoryId !== action.payload ){
               return item
             }
@@ -39,50 +75,3 @@ export const taskList = (state = initialState , action) => {
       return state
   }
 }
-  //
-  // const changeTask = (id) => {
-  //   let list = props.data;
-  //   list.filter( (item) => (
-  //     (item.id === id) ? item.edit = !item.edit : null
-  //   ))
-  //   props.updateTask(list)
-  // }
-  //
-  // const updateTask = (id,data) => {
-  //   let list = props.data;
-  //     list.filter( (item) => (
-  //       (item.id === id) ? (
-  //         item.edit = !item.edit,
-  //         item.taskName = data )
-  //       : null
-  //     ))
-  //   props.updateTask(list)
-  // }
-  // const changeTaskStatus = (id,status) => {
-  //   let list = props.data;
-  //   list.filter( (item) => (
-  //     (item.id === id) ? item.done = status : null
-  //   ))
-  //
-  //   props.updateTask(list)
-  // }
-  // const addTask = (data) => {
-  //   let prevId;
-  //   let nextId;
-  //
-  //   if(props.data.length){
-  //     prevId = props.data[props.data.length-1].id;
-  //     nextId = 'id' + ( Number(prevId.replace(/\D+/g,"")) + 1 );
-  //   }else{
-  //     nextId = 'id1'
-  //   }
-  //   let newTask = {
-  //     id:nextId,
-  //     done:false,
-  //     taskName:data,
-  //     taskDesription:'',
-  //     edit:false,
-  //     categoryId:props.selected
-  //   }
-  //   props.updateTask(newTask)
-  // }

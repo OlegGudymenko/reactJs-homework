@@ -68,6 +68,8 @@ ul li{
     background-color:#cbcbcb;
 }
 .categories-container .task-name{
+  width: 270px;
+  text-align: left;
   height: 34px;
   line-height: 34px;
 }
@@ -95,4 +97,8 @@ ul li{
 }
 .task-table th ,.task-table td{
   text-align: center;
+  transition: all .5s ;
+}
+.done-task{
+  text-decoration:line-through;
 }

@@ -22,22 +22,13 @@ const initialState = [
       parent:null,
       edit:false,
       addChild:false,
-      child:['2.1']
-    },
-    {
-      id:'2.1',
-      name:'redux3',
-      parent:'2',
-      edit:false,
-      addChild:false,
       child:[]
     },
-
 ]
 
 export const categoriesList = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_CATEGORY:{
+    case ADD_CATEGORY: {
       let itemId ;
       if( state.length ){
         itemId = state[state.length-1].id;
@@ -83,32 +74,33 @@ export const categoriesList = (state = initialState, action) => {
       }
       break;
       case SAVE_SUB_CATEGORY:{
-        let newId, childlength, newCategory, newState
-        const itemId = action.payload.itemId
-        const data = action.payload.data
+        let newId,  newCategory, newState
+        const { itemId, data } = action.payload
 
         newState = state.map( (item) => {
           if( item.id === itemId ){
-            childlength = item.child.length + 1
-            newId = (itemId + '.' + childlength ).toString()
-            item.addChild = !item.addChild
+            const childlength = item.child.length + 1
+              newId = (itemId + '.' + childlength ).toString()
+              item.addChild = !item.addChild
+              item.child.push(newId)
           }
           return item
         })
-        newCategory = {
-          id: newId,
+
+        const newSubCategory = [{
+          id:  newId,
           name: data,
           parent: itemId,
           edit: false,
           addChild: false,
-          child: [],
-        }
+          child: []
+        }];
+        const newStateAll = [...state, ...newSubCategory ]
 
-       newState = [...newState, ...newCategory ]
-        return (
-          [...state, ...newState ]
-        )
+        return [...state, ...newSubCategory];
+
       }
+
       break;
       case REMOVE_CATEGORY:{
         let newList = state.filter( (item) => {

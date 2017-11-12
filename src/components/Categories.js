@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -13,7 +14,6 @@ import {
   saveSubCategory,
   removeCategory
  } from '../actions/categories'
-// import * as CategoriesActions from '../actions/categories'
 import './App.css';
 
 const Categories = (props) => {
@@ -70,7 +70,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     // CategoriesActions: bindActionCreators(CategoriesActions, dispatch)
-    // addCategory: () => dispatch(addCategory(  )),
+    addCategory: (data) => dispatch(addCategory(data)),
     selectCategory: (id) => dispatch(selectCategory(id)),
     editCategory: (id) => dispatch(editCategory(id)),
     saveCategoryChanges: (id, text) => dispatch(saveCategoryChanges(id, text)),

@@ -1,43 +1,37 @@
-import {
-    ADD_TASK,
-    CHANGE_TASK,
-    UPDATE_TASK,
-    CHANGE_TASK_STATUS,
-    SELECT_CATEGORY
-  } from './constants'
 
-  const addTask = (data) => ({
-      type: ADD_TASK,
-      payload: data
+import * as actionsType from './constants'
+
+export const addTask = (data, categoryId) => ({
+      type: actionsType.ADD_TASK,
+      payload: {
+        data: data,
+        categoryId: categoryId
+      }
     }
   )
 
-  const changeTask = (id) => ({
-      type: CHANGE_TASK,
+export const changeTask = (id) => ({
+      type: actionsType.CHANGE_TASK,
       payload: id
     }
   )
 
-  const updateTask = (id,data) => ({
-      type: UPDATE_TASK,
+export const updateTask = (id,data) => ({
+      type: actionsType.UPDATE_TASK,
       payload: {
-        id: id,
+        taskId: id,
         data: data
       }
     }
   )
-
-  const changeTaskStatue = (id,status) => ({
-      type: CHANGE_TASK_STATUS,
-      payload: {
-        id: id,
-        status: status
-      }
+export const changeTaskStatus = (id) => ({
+      type: actionsType.CHANGE_TASK_STATUS,
+      payload: id
     }
   )
 
-  const removeCategory = (id) => ({
-    type: REMOVE_CATEGORY,
+export const removeCategory = (id) => ({
+    type: actionsType.REMOVE_CATEGORY,
     payload: id
     }
   )

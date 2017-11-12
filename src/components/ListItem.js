@@ -30,7 +30,6 @@ class ListItem extends Component {
       }
     }
   render() {
-    console.log(this.props);
     const {
       data,
       selectCategory,
@@ -59,11 +58,11 @@ class ListItem extends Component {
             onChange={this.inputChange}
           />
         :
-        <span
-          className='task-name pull-left'
-          onClick={ () => selectCategory(data.id)}>
+
+        <div className='task-name pull-left'
+             onClick={ () => selectCategory(data.id)}>
             {data.name}
-        </span> }
+        </div> }
         <div className="btn-group pull-right">
           {data.edit ?
             <BtnIcon
@@ -109,7 +108,6 @@ class ListItem extends Component {
                       createSubCategory={(id) => { createSubCategory(id) }}
                       saveSubCategory={(id, parentId, text) => { saveSubCategory(id, parentId, text) }}
                       removeCategory={(id, parentId) => { removeCategory(id, parentId) }}
-
                     />
                   )
               }
