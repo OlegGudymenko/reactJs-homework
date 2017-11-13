@@ -62,8 +62,9 @@ export const taskList = (state = initialState , action) => {
     }
     break;
     case REMOVE_CATEGORY: {
+      debugger
       const newList = state.filter( (item) => {
-            if( item.categoryId !== action.payload ){
+            if( item.categoryId !== action.payload.itemId ){
               return item
             }
           })
